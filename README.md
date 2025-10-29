@@ -50,11 +50,12 @@ Récupération des données et Ingestion des données dans NIFI et envoi dans Ka
 
 ### Centralisation et envoi dans Spark
 mettre une capture
-### description du pipeline
-.....
 
-## Déploiement 
-....
+### Traitement des données dans Spark 
+mettre capture ?
+
+### Description du pipeline
+.....
 
 ## Visualisation des données avec Grafana
 ....
