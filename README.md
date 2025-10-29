@@ -44,8 +44,12 @@ INSERER NOTRE ARCHITECTURE !!!
    - Grafana est utilisé pour créer des tableaux de bord interactifs, permettant de suivre l'état du trafic aérien.
 
 ## Déroulement technique du projet
-### Extraction et Ingestion
-.....
+### Ingestion avec NIFI & Envoi dans Kafka
+Récupération des données et Ingestion des données dans NIFI et envoi dans Kafka (voir capture pour le schéma dans NIFI).
+<img width="1552" height="379" alt="Capture d'écran 2025-10-29 134902" src="https://github.com/user-attachments/assets/d33f4567-ab01-4ba8-87c0-2a868e881d91" />
+
+### Centralisation et envoi dans Spark
+mettre une capture
 ### description du pipeline
 .....
 
