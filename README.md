@@ -17,7 +17,7 @@ L’objectif est de construire un pipeline ETL (Extract – Transform – Load) 
 |------------|-------------|-------------|
 | Apache NiFi | Pour l’ingestion de données | 2.6.0 |
 | Apache Kafka | Pour le streaming distribué | |
-| Apache Spark | Batch ou Streaming pour le traitement distribué | 4.1.6 |
+| Apache Spark | Batch pour le traitement distribué | 4.1.6 |
 | Postgres | Pour le stockage distribué | 15.14 |
 | Grafana | Pour la visualisation finale | v12.2.1 |
 | Docker & Docker Compose | Pour la mise en place de l’environnement | 28.5.1 |
