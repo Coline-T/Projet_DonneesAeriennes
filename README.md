@@ -192,10 +192,8 @@ Les données aériennes traitées sont stockées dans **PostgreSQL** dans une ta
 
 Les dashboards sont mis à jour dynamiquement grâce au rafraîchissement automatique de Grafana.
 
-*(capture du dashboard Grafana ici)*
+<img width="1331" height="685" alt="Capture d&#39;écran 2025-10-31 093127" src="https://github.com/user-attachments/assets/d53e57b0-5e79-44b6-8272-6f74055937e5" />
 
-
-## Difficultés rencontrées
 
 ## Difficultés rencontrées et solutions apportées
 
