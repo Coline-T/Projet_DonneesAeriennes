@@ -185,7 +185,6 @@ Les données aériennes traitées sont stockées dans **PostgreSQL** dans une ta
 ## Visualisation des données avec Grafana
 **Grafana** se connecte à PostgreSQL pour visualiser les indicateurs en quasi temps réel :
 - Carte du trafic aérien (positions longitude/latitude),
-- Altitude et vitesse moyenne par avion ou par zone géographique,
 - Distribution des vols par pays d’origine,
 - Nombre d’avions en vol / au sol.
 - Nombre d'avion en situation spécifique (alerte)
