@@ -41,6 +41,75 @@ Nous avions un choix d'API à faire parmi plusieurs API publique et aérienne et
    [Grafana Dashboard]
 ```
 
+## Arborescence du projet
+```
+C:.
+├───grafana_data
+│   ├───csv
+│   ├───pdf
+│   ├───plugins
+│   │   ├───grafana-exploretraces-app
+│   │   │   ├───components
+│   │   │   │   └───states
+│   │   │   │       └───EmptyState
+│   │   │   │           └───img
+│   │   │   ├───img
+│   │   │   └───utils
+│   │   │       └───trace-merge
+│   │   │           └───test-responses
+│   │   ├───grafana-lokiexplore-app
+│   │   │   └───img
+│   │   │       └───icons
+│   │   │           ├───dark
+│   │   │           └───light
+│   │   ├───grafana-metricsdrilldown-app
+│   │   │   └───img
+│   │   └───grafana-pyroscope-app
+│   │       ├───img
+│   │       ├───pages
+│   │       │   └───ProfilesExplorerView
+│   │       │       └───components
+│   │       │           └───SceneByVariableRepeaterGrid
+│   │       │               └───components
+│   │       │                   └───SceneEmptyState
+│   │       │                       └───ui
+│   │       │                           └───img
+│   │       └───shared
+│   │           └───infrastructure
+│   │               └───profile-metrics
+│   └───png
+├───nifi_data
+├───postgres_data
+│   ├───base
+│   │   ├───1
+│   │   ├───16384
+│   │   ├───4
+│   │   ├───5
+│   │   └───pgsql_tmp
+│   ├───global
+│   ├───pg_commit_ts
+│   ├───pg_dynshmem
+│   ├───pg_logical
+│   │   ├───mappings
+│   │   └───snapshots
+│   ├───pg_multixact
+│   │   ├───members
+│   │   └───offsets
+│   ├───pg_notify
+│   ├───pg_replslot
+│   ├───pg_serial
+│   ├───pg_snapshots
+│   ├───pg_stat
+│   ├───pg_stat_tmp
+│   ├───pg_subtrans
+│   ├───pg_tblspc
+│   ├───pg_twophase
+│   ├───pg_wal
+│   │   └───archive_status
+│   └───pg_xact
+└───spark
+```
+
 ## Étapes du projet 
 1. **Ingestion des données du trafic aérien** : 
 - Récupération des données sur le flux du trafic aérien en temps réel via l'API "OpenSky Network" disponible en ligne puis en envoi des données dans Kafta, en passant par Apache NIFI.
@@ -128,8 +197,52 @@ Les dashboards sont mis à jour dynamiquement grâce au rafraîchissement automa
 
 ## Difficultés rencontrées
 
-Problèmes de dépendances 
-**a finir de compléter**
+## Difficultés rencontrées et solutions apportées
+
+Au cours du développement du projet, plusieurs difficultés techniques ont été rencontrées, principalement liées à l’intégration et à la compatibilité des différents outils Big Data au sein de l’environnement Dockerisé.
+
+### 1. Problèmes de dépendances et de versions
+L’une des premières difficultés concernait les **incompatibilités de versions** entre certains services (notamment entre **NiFi**, **Kafka**, **Spark** et leurs **drivers JDBC**).  
+Ces différences de versions provoquaient des erreurs lors du démarrage des conteneurs ou lors des connexions inter-services (ex. Spark ↔ PostgreSQL).
+
+**Solution :**  
+Un travail d’ajustement des versions dans le fichier `docker-compose.yml` et dans les fichiers de configuration a été nécessaire.  
+Chaque composant a été harmonisé pour garantir une compatibilité entre :
+- le driver Kafka utilisé par Spark ;
+- la version du connecteur JDBC PostgreSQL ;
+- et la configuration réseau des conteneurs.
+
+---
+
+### 2. Adaptation du Docker Compose à l’environnement local
+Lors du déploiement, des différences de configuration liées à l’environnement local (ports réservés, ressources, réseau Docker, etc.) ont empêché certains services de se lancer correctement.
+
+**Solution :**  
+Le fichier `docker-compose.yml` a été **modifié et personnalisé** pour correspondre à la configuration de la machine :
+- ajustement des **ports exposés** ;
+- adaptation des **volumes et chemins de stockage** ;
+- correction de certaines dépendances entre services (`depends_on`) ;
+- optimisation de la mémoire allouée à **Spark** et **PostgreSQL**.
+
+Ces ajustements ont permis d’obtenir un environnement stable et fonctionnel, capable de faire communiquer correctement tous les conteneurs.
+
+---
+
+### 3. Interconnexion des services
+La communication entre les conteneurs (**NiFi → Kafka → Spark → PostgreSQL**) n’a pas toujours été immédiate, notamment à cause de la **latence réseau interne** ou de **problèmes de résolution DNS Docker**.
+
+**Solution :**  
+Des tests successifs de connectivité et des ajustements de configuration (`bootstrap.servers`, `JDBC URLs`, `hostname`) ont été effectués.  
+Chaque service a ensuite pu se connecter correctement à ses dépendances via le **réseau Docker interne**.
+
+---
+
+Ces difficultés, bien qu’initialement bloquantes, ont permis de mieux comprendre :
+- les interactions entre conteneurs dans un environnement distribué ;
+- la gestion fine des dépendances entre technologies Big Data ;
+- et les bonnes pratiques de déploiement d’un pipeline complet sous Docker.
+
+
 
 ## Conclusion <a name="conclusion"></a>
 Ce projet nous a permis de mettre en œuvre une chaîne complète de traitement de données en **quasi-temps réel**, depuis la collecte jusqu’à la visualisation, en mobilisant un ensemble cohérent d’outils du Big Data.
